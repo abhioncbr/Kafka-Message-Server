@@ -19,4 +19,14 @@ Kafka-Message-Server is an sample application for demonstrating kafka usage as m
    
    five execution permission to the scripts using chmod command.
    
-5)     
+5) Copy 'commons-cli-1.1.jar' in to the Kafka 'libs' folder.
+
+6) Start Zookeper server using command - bin/zookeeper-server-start.sh config/zookeeper.properties
+
+7) Start Kafka server using command - bin/kafka-server-start.sh config/server.properties
+
+8) Start mail content creation program using command - bin/java-mail-content-producer.sh -path [directory-path]
+
+9) Start message server mail producer using command - bin/java-mail-producer-demo.sh -path [same directory path given above] -topic [topic name]
+
+10) Start message server mail consumer using command - bin/java-mail-consumer-demo.sh -topic [same topic name given above]
