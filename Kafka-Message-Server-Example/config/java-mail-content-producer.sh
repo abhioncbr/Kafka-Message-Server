@@ -7,6 +7,12 @@ do
   CLASSPATH=$CLASSPATH:$file
 done
 
+# classpath addition for release
+for file in $base_dir/libs/commons*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
 echo $CLASSPATH
 
 # Which java to use

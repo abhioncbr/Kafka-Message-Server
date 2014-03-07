@@ -159,6 +159,12 @@ public class KafkaMailProducer extends Thread {
 
 	}
 	
+  /**
+   * Read file content.
+   *
+   * @param file the file
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   private void readFileContent(File file) throws IOException{
 		
 	  	RandomAccessFile aFile = new RandomAccessFile(file, "r");
@@ -176,6 +182,7 @@ public class KafkaMailProducer extends Thread {
 	    
 	    producer.send(new KeyedMessage<Integer, String>(topic, strBuilder.toString()));
 	    
+	    System.out.println(file.getAbsolutePath() + " - content consumed.");
 	    
 	    file.delete();
 	}

@@ -20,6 +20,12 @@ public class KafkaExampleProperty {
 		} 
 	}
 	
+	/**
+	 * Gets the property value.
+	 *
+	 * @param propertyKey the property key
+	 * @return the property value
+	 */
 	public static String getPropertyValue(String propertyKey){
 		return prop.getProperty(propertyKey);
 	}

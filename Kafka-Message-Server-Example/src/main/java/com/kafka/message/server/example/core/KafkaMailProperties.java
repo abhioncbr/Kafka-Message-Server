@@ -20,6 +20,4 @@ public interface KafkaMailProperties{
     final static String topic3 = "topic3";
     final static String clientId = "MailConsumerDemoClient";
 
-    // update mail directory path as per your system
-    final static String mailDirectory = "/home/hduser/mail/";
 }

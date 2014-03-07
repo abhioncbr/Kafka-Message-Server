@@ -4,12 +4,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.ParseException;
+
+import com.kafka.message.server.example.util.KafkaExampleCommandLineHandler;
+import com.kafka.message.server.example.util.KafkaExampleFileUtil;
 import com.kafka.message.server.example.util.KafkaExampleProperty;
 import com.kafka.message.server.example.util.KafkaExamplePropertyKey;
 
+/**
+ * The Class CreateFile.
+ * 
+ * @author Abhishek Sharma
+ */
 public class CreateFile {
+	private static final String PATH = "path";
+	private static final String SLEEP_TIME = "sleepTime";
+	
 
 	private final String directoryPath;
 	private final Integer threadSleepTime;
@@ -36,23 +51,28 @@ public class CreateFile {
 
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String args[]) {
 		CreateFile createFile;
 		
-		if(args.length > 2){
-			printUsage();
-			return;
-		} else if(args.length ==2){
-			Integer temp = Integer.parseInt(args[1]);
-			createFile = new CreateFile(args[0], temp);
-		} else if(args.length ==1){
-			createFile = new CreateFile(args[0], null);
-		} else{
-			createFile = new CreateFile(null, null);
-		}
-		
+		KafkaExampleCommandLineHandler commandLine;
 		try {
+			commandLine = new  KafkaExampleCommandLineHandler(getProducerOptions(), args);
+			
+			String path = commandLine.getOption(PATH);
+			String sleepTime  = commandLine.getOption(SLEEP_TIME);
+
+			
+			createFile = new CreateFile(path !=null ? KafkaExampleFileUtil.getValidDirectoryPath(path) : getDirectoryPathDefaultValue()
+					, sleepTime !=null ? Integer.parseInt(sleepTime) : getThreadSleepTimeDefaultValue());
 			createFile.creatMailContent();
+
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -82,6 +102,8 @@ public class CreateFile {
 			fc.close();
 			fout.close();
 			
+			System.out.println("created file - "  + fileName);
+			
 			Thread.sleep(threadSleepTime * 1000);
 		}
 	}
@@ -91,7 +113,7 @@ public class CreateFile {
 	 * 
 	 * @return the directory path default value
 	 */
-	private String getDirectoryPathDefaultValue() {
+	private static String getDirectoryPathDefaultValue() {
 		return KafkaExampleProperty
 				.getPropertyValue(KafkaExamplePropertyKey.MAIL_DIRECTORY);
 	}
@@ -101,7 +123,7 @@ public class CreateFile {
 	 * 
 	 * @return the thread sleep time default value
 	 */
-	private Integer getThreadSleepTimeDefaultValue() {
+	private static Integer getThreadSleepTimeDefaultValue() {
 		return Integer
 				.parseInt(KafkaExampleProperty
 						.getPropertyValue(KafkaExamplePropertyKey.FILE_CREATE_THREAD_SLEEP_TIME));
@@ -125,12 +147,16 @@ public class CreateFile {
 		return content.toString().getBytes();
 	}
 	
-	/**
-	 * Prints the usage.
-	 */
-	private static void printUsage(){
-		System.out.println("Please provide two or less than two arguments.");
-		System.out.println("First argument is directory path.");
-		System.out.println("second argument is time in seconds for gap between two file creation.");
+	
+	private static List<Option> getProducerOptions(){
+		List<Option> optionList = new ArrayList<Option>();
+		
+		Option pathOption = new Option(PATH, PATH, true, "directory path where file is going to be created");
+		Option sleepOption = new Option(SLEEP_TIME, SLEEP_TIME, true, "time difference between two files creation");
+
+		optionList.add(pathOption);
+		optionList.add(sleepOption);
+		
+		return optionList;
 	}
 }
