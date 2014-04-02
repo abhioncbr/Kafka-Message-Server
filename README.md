@@ -9,7 +9,7 @@ Kafka-Message-Server is an sample application for demonstrating kafka usage as m
 
 2) There is no need to set hadoop or zookeper in your system. You can use zookeper startup script present in bin folder of Kafka.
 
-3) For the execution of the sample application - copy 'kafka-message-server-example-0.8.0.jar' in to the kafka folder where  'kafka_2.8.0-0.8.0.jar' is present.
+3) For the execution of the sample application - copy 'kafka-message-server-example-0.8.0.jar' in to the kafka folder where  'kafka_2.8.0-0.8.0.jar' is present. Sample application is dependent on 'commons-cli-1.1.jar'. Copy 'commons-cli-1.1.jar' in to the 'libs' folder of the Apache Kafka.
 
 4) Copy following scripts from 'Kafka-Message-Server-Example/config' folder in to 'bin' folder of kafka
    a) java-mail-content-producer.sh
